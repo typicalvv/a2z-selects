@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+<title>A2Z Selects | Business Dashboard</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      padding: 40px;
+      color: #222;
+    }
+    .dashboard {
+      max-width: 1000px;
+      margin: auto;
+    }
+    h1 { color: #243b53; }
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      flex: 1;
+      min-width: 180px;
+      box-shadow: 0 2px 8px #00000012;
+    }
+    .card h2 { color: #2563eb; }
+  </style>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>A2Z Selects Dashboard</h1>
+    <p>Welcome to your inventory and financial dashboard!</p>
+
+<section class="profit-chart">
+  <div class="chart-header">
+    <h2>Profit & Expenses</h2>
+    <p>Your monthly business performance</p>
+  </div>
+
+  <div class="chart-legend">
+    <span class="profit-label">● Profit</span>
+    <span class="expense-label">● Expenses</span>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="profitExpenseChart"></canvas>
+  </div>
+</section>
+
+    <div class="cards">
+      <div class="card">
+<h3>Units in Inventory</h3>
+<h2 id="totalProducts">0</h2>
+
+      </div>
+
+      <div class="card">
+       
+<h3>Total Inventory Purchase Cost</h3>
+<h2 id="totalInventoryCost">$0.00</h2>
+      </div>
+
+      <div class="card">
+        <h3>Gross Profit</h3>
+        <h2>$0.00</h2>
+      </div>
+
+      <div class="card">
+        <h3>Net Profit</h3>
+        <h2>$0.00</h2>
+      </div>
+    </div>
+<section class="card" id="inventory" style="margin-top: 25px;">  <h2>Add Inventory Purchase</h2>
+
+  <form id="productForm">
+    <p>
+      <label>Product Name</label><br>
+      <input id="productName" type="text" required>
+    </p>
+
+    <p>
+      <label>Quantity Purchased</label><br>
+      <input id="quantity" type="number" min="1" step="1" required>
+    </p>
+
+    <p>
+      <label>Purchase Cost Per Item ($)</label><br>
+      <input id="purchaseCost" type="number"
+             min="0" step="0.01" required>
+    </p>
+
+    <p>
+      <label>Expected Selling Price ($)</label><br>
+      <input id="sellingPrice" type="number"
+             min="0" step="0.01" required>
+    </p>
+
+    <p>
+      <label>Purchase Date</label><br>
+      <input id="purchaseDate" type="date" required>
+    </p>
+
+    <button type="submit">Add to Inventory</button>
+  </form>
+
+  <h2>Inventory Purchases</h2>
+  <table border="1" cellpadding="10" width="100%">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Cost Each</th>
+        <th>Date</th>
+<th>Action</th>
+
+      </tr>
+    </thead>
+    <tbody id="inventoryTable"></tbody>
+  </table>
+</section>
+
+<section class="card" id="sales" style="margin-top: 25px;">  <h2>Record a Sale</h2>
+
+  <form id="saleForm">
+    <p>
+      <label for="saleBatch">Select Purchase Batch</label><br>
+      <select id="saleBatch" required></select>
+    </p>
+
+    <p>
+      <label for="saleQuantity">Quantity Sold</label><br>
+      <input id="saleQuantity" type="number"
+             min="1" step="1" required>
+    </p>
+
+<p>
+  <select id="salesPlatform" required>
+    <option value="Facebook Marketplace">Facebook Marketplace</option>
+    <option value="eBay">eBay</option>
+    <option value="Other">Other</option>
+  </select>
+</p>
+
+<p>
+  <label for="paymentMethod">How Did You Get Paid?</label><br>
+  <select id="paymentMethod" required>
+    <option value="Cash">Cash</option>
+    <option value="Zelle">Zelle</option>
+    <option value="Cash App">Cash App</option>
+    <option value="eBay Payout">eBay Payout</option>
+    <option value="Other">Other</option>
+  </select>
+</p>
+
+    <p>
+      <label for="salePrice">Selling Price Per Item ($)</label><br>
+      <input id="salePrice" type="number"
+             min="0" step="0.01" required>
+    </p>
+
+    <p>
+      <label for="saleDate">Date Sold</label><br>
+      <input id="saleDate" type="date" required>
+    </p>
+
+    <button type="submit">Record Sale</button>
+  </form>
+
+  <h2>Sales History</h2>
+  <table border="1" cellpadding="10" width="100%">
+    <thead>
+      <tr>
+        <th>Product</th>
+<th>Sold Through</th>
+<th>Payment Method</th>
+        <th>Quantity</th>
+        <th>Revenue</th>
+        <th>Cost</th>
+        <th>Profit</th>
+        <th>Date</th>
+<th>Actions</th>
+
+      </tr>
+    </thead>
+    <tbody id="salesTable"></tbody>
+  </table>
+</section>
+
+<section class="card" id="expenses" style="margin-top: 25px;">  <h2>Business Expenses</h2>
+
+  <form id="expenseForm">
+    <p>
+      <label for="expenseDescription">Description</label><br>
+      <input id="expenseDescription" type="text"
+             placeholder="Example: Shipping supplies" required>
+    </p>
+
+    <p>
+      <label for="expenseCategory">Category</label><br>
+     
+<select id="expenseCategory" required>
+  <option value="Gas / Vehicle Expenses">Gas / Vehicle Expenses</option>
+  <option value="Business Mileage">Business Mileage</option>
+  <option value="Shipping Labels">Shipping Labels</option>
+  <option value="Shipping Boxes">Shipping Boxes</option>
+  <option value="Packaging Supplies">Packaging Supplies</option>
+  <option value="Platform Fees">Platform Fees</option>
+  <option value="Payment Processing Fees">Payment Processing Fees</option>
+  <option value="Advertising">Advertising</option>
+  <option value="Storage">Storage</option>
+  <option value="Office Supplies">Office Supplies</option>
+  <option value="Software">Software</option>
+  <option value="Other Business Expenses">Other Business Expenses</option>
+</select>
+    </p>
+
+    <p>
+      <label for="expenseAmount">Amount ($)</label><br>
+      <input id="expenseAmount" type="number"
+             min="0.01" step="0.01" required>
+    </p>
+
+    <p>
+      <label for="expenseDate">Expense Date</label><br>
+      <input id="expenseDate" type="date" required>
+    </p>
+
+    <button type="submit">Add Expense</button>
+  </form>
+
+  <h2>Expense History</h2>
+
+  <table border="1" cellpadding="10" width="100%">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody id="expensesTable"></tbody>
+  </table>
+</section>
+</div>
+
+<nav class="mobile-nav">
+  <a href="#home">🏠<span>Home</span></a>
+  <a href="#inventory">📦<span>Inventory</span></a>
+  <a href="#sales">🛒<span>Sales</span></a>
+  <a href="#expenses">🧾<span>Expenses</span></a>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
+<div id="editSaleOverlay" class="edit-overlay" hidden>
+  <div class="edit-sheet">
+    <div class="edit-sheet-handle"></div>
+    <h2>Edit Sale</h2>
+
+    <form id="editSaleForm">
+      <input type="hidden" id="editSaleId">
+
+      <label for="editSaleQuantity">Quantity Sold</label>
+      <input id="editSaleQuantity" type="number" min="1" step="1" required>
+
+      <label for="editSalePrice">Selling Price Per Item ($)</label>
+      <input id="editSalePrice" type="number" min="0" step="0.01" required>
+
+      <label for="editSalesPlatform">Sold Through</label>
+      <select id="editSalesPlatform">
+        <option>Facebook Marketplace</option>
+        <option>eBay</option>
+        <option>Other</option>
+      </select>
+
+      <label for="editPaymentMethod">Payment Method</label>
+      <select id="editPaymentMethod">
+        <option>Cash</option>
+        <option>Zelle</option>
+        <option>Cash App</option>
+        <option>eBay Payout</option>
+        <option>Other</option>
+      </select>
+
+      <label for="editSaleDate">Date Sold</label>
+      <input id="editSaleDate" type="date" required>
+
+      <button type="submit">Save Changes</button>
+      <button type="button" id="cancelEditSale">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
